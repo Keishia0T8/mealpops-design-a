@@ -7,6 +7,6 @@
   Never put the "service_role" key here.
 */
 window.MEALPOPS_SUPABASE = {
-  url: "https://YOUR-PROJECT.supabase.co",
-  anonKey: "YOUR-ANON-KEY"
+  url: "https://ebkllvatlamprztbheql.supabase.co/rest/v1/",
+  anonKey: "sb_publishable_ZFzMC08gBOd4KNxrB0bmOQ_2q87Z9Y8"
 };
