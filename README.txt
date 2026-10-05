@@ -63,3 +63,9 @@ Good to know
   When real data is added (restaurants, members, and so on), protect
   that data in Supabase with Row Level Security so only signed in
   admins can read or change it.
+
+
+ANIMATIONS
+  motion.js adds the page fades, scroll reveals, hover effects and
+  count ups. Every page loads it with one line in its <head>. Delete
+  that line from a page to turn animations off there.
