@@ -55,11 +55,34 @@
     /* directory search results pop back in */
     '.mp-again{animation:mpAgain .6s ' + EASE + ' both}',
     '@keyframes mpAgain{from{opacity:0;scale:.97}to{opacity:1;scale:1}}',
+    /* top bar stays on screen and turns into a floating glass pill */
+    'html{scroll-padding-top:112px}',
+    'header.mp-sticky{position:sticky!important;top:0;z-index:60;border:1px solid transparent;transition:top .6s ' + EASE + ',margin .6s ' + EASE + ',height .6s ' + EASE + ',padding .6s ' + EASE + ',border-radius .6s ' + EASE + ',background-color .6s ease,box-shadow .6s ease,border-color .6s ease,backdrop-filter .6s ease,-webkit-backdrop-filter .6s ease}',
+    'header.mp-sticky.mp-stuck{top:12px;margin:0 32px 24px;height:72px!important;padding-left:28px!important;padding-right:28px!important;border-radius:999px;background-color:rgba(255,246,234,.72);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);box-shadow:0 14px 36px -18px rgba(29,27,22,.38);border-color:rgba(29,27,22,.08)}',
+    'header.mp-sticky.mp-small.mp-stuck{top:8px;margin:0 10px 12px;height:60px!important;padding-left:16px!important;padding-right:12px!important}',
+    '@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){header.mp-sticky.mp-stuck{background-color:rgba(255,246,234,.96)}}',
     /* reduced motion: keep it calm */
     '@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}'
   ].join('\n');
   var st = document.createElement('style'); st.id = 'mp-motion-css'; st.textContent = css;
   (document.head || doc).appendChild(st);
+  function stickyBar() {
+    var h = document.querySelector('body > div > header, body > main > header'); if (!h) return;
+    var root = h.parentElement;
+    if (window.CSS && CSS.supports && CSS.supports('overflow', 'clip')) {
+      if (getComputedStyle(root).overflow !== 'visible') root.style.overflow = 'clip';
+    } else return;
+    h.classList.add('mp-sticky'); if (h.offsetHeight < 90) h.classList.add('mp-small');
+    var stuck = false, ticking = false;
+    function check() {
+      ticking = false; var y = window.scrollY || doc.scrollTop;
+      if (!stuck && y > 40) { stuck = true; h.classList.add('mp-stuck'); }
+      else if (stuck && y < 12) { stuck = false; h.classList.remove('mp-stuck'); }
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(check); } }, { passive: true });
+    check();
+  }
+  if (document.readyState !== 'loading') stickyBar(); else document.addEventListener('DOMContentLoaded', stickyBar);
   if (reduce) return;
   doc.classList.add('mp-m');
 
