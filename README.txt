@@ -7,7 +7,7 @@ What's inside
   the restaurant directory, about, how it works, terms and privacy,
   plus their mobile versions (the files starting with M)
   AdminLogin.html The admin portal sign in page (design only, not connected)
-  assets/         Restaurant logos and leadership photos
+  The .png, .js files sit next to the pages (no folders needed)
 
 Phones are sent to the mobile version of a page automatically.
 
@@ -50,7 +50,7 @@ The admin pages use Supabase Auth for real accounts:
 
 4. Connect the website
    Project Settings, then API. Copy the Project URL and the
-   "anon public" key into assets/admin-config.js, then upload that
+   "anon public" key into admin-config.js, then upload that
    file to GitHub again. Never use the "service_role" key.
 
 5. Invite your first admin

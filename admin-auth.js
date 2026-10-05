@@ -41,14 +41,14 @@
     if (window.console) console.warn('[Meal POPs admin] ' + text);
   }
 
-  if (!window.MEALPOPS_SUPABASE) { stop("Sign in can't start: the settings file assets/admin-config.js is missing or has a typo. Check that it's in the assets folder and every value is inside quotation marks."); return; }
-  if (!configured) { stop('Admin sign in is not connected yet. Add your Supabase Project URL and publishable key to assets/admin-config.js.'); return; }
-  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(cfg.url)) { stop('The Project URL in assets/admin-config.js looks wrong. It should look like https://abcdefgh.supabase.co with nothing after it.'); return; }
-  if (!window.supabase || !window.supabase.createClient) { stop("Sign in can't start: assets/supabase.js didn't load. Make sure it was uploaded to the assets folder."); return; }
+  if (!window.MEALPOPS_SUPABASE) { stop("Sign in can't start: the settings file admin-config.js is missing or has a typo. Check that it's in the assets folder and every value is inside quotation marks."); return; }
+  if (!configured) { stop('Admin sign in is not connected yet. Add your Supabase Project URL and publishable key to admin-config.js.'); return; }
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(cfg.url)) { stop('The Project URL in admin-config.js looks wrong. It should look like https://abcdefgh.supabase.co with nothing after it.'); return; }
+  if (!window.supabase || !window.supabase.createClient) { stop("Sign in can't start: supabase.js didn't load. Make sure it was uploaded to the assets folder."); return; }
 
   var sb;
   try { sb = window.supabase.createClient(cfg.url.replace(/\/$/, ''), cfg.anonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }); }
-  catch (e) { stop("Sign in can't start: the settings in assets/admin-config.js aren't valid. Double check the URL and key."); return; }
+  catch (e) { stop("Sign in can't start: the settings in admin-config.js aren't valid. Double check the URL and key."); return; }
   if (window.console) console.info('[Meal POPs admin] connected to ' + cfg.url);
 
   /* SIGN IN PAGE */
