@@ -32,13 +32,24 @@
     return 'Something went wrong. Please try again.';
   }
 
-  if (!configured) {
+  function stop(text) {
     if (page === 'dashboard') { location.replace(LOGIN); return; }
-    msg('Admin sign in is not connected yet. Add your Supabase project details to assets/admin-config.js.', 'info');
-    reveal(); return;
+    msg(text, 'error'); reveal();
+    ['mp-signin', 'mp-save', 'mp-forgot'].forEach(function (id) {
+      var el = $(id); if (el) el.addEventListener('click', function (ev) { ev.preventDefault(); msg(text, 'error'); });
+    });
+    if (window.console) console.warn('[Meal POPs admin] ' + text);
   }
 
-  var sb = window.supabase.createClient(cfg.url, cfg.anonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+  if (!window.MEALPOPS_SUPABASE) { stop("Sign in can't start: the settings file assets/admin-config.js is missing or has a typo. Check that it's in the assets folder and every value is inside quotation marks."); return; }
+  if (!configured) { stop('Admin sign in is not connected yet. Add your Supabase Project URL and publishable key to assets/admin-config.js.'); return; }
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(cfg.url)) { stop('The Project URL in assets/admin-config.js looks wrong. It should look like https://abcdefgh.supabase.co with nothing after it.'); return; }
+  if (!window.supabase || !window.supabase.createClient) { stop("Sign in can't start: assets/supabase.js didn't load. Make sure it was uploaded to the assets folder."); return; }
+
+  var sb;
+  try { sb = window.supabase.createClient(cfg.url.replace(/\/$/, ''), cfg.anonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }); }
+  catch (e) { stop("Sign in can't start: the settings in assets/admin-config.js aren't valid. Double check the URL and key."); return; }
+  if (window.console) console.info('[Meal POPs admin] connected to ' + cfg.url);
 
   /* SIGN IN PAGE */
   if (page === 'login') {
